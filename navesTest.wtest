@@ -26,6 +26,28 @@ describe "Nave de carga" {
 		assert.equals(0, naveVacia.carga())
 	}
 
+	test "propulsarse" {
+		naveVacia.propulsar()
+		assert.equals(20000, naveVacia.velocidad())
+	}
+
+}
+
+describe "Nave de residuos radioactivos" {
+	const naveDeResiduos = new NaveCargaResiduosRadioactivos(carga = 5000, sellado = true, velocidad = 10000)
+
+  test "nave de residuos" {
+	naveDeResiduos.recibirAmenaza()
+	assert.equals(0, naveDeResiduos.velocidad())
+	assert.equals(5000, naveDeResiduos.carga())
+  }
+
+  test "preparar para viajar" {
+	const naveDeResiduos2 = new NaveCargaResiduosRadioactivos(velocidad = 0, sellado = false)
+	naveDeResiduos2.prepararParaViajar()
+	assert.equals(15000, naveDeResiduos2.velocidad())
+	assert.that(naveDeResiduos2.sellado())
+  }
 }
 
 describe "Nave de pasajeros" {
@@ -54,6 +76,24 @@ describe "Nave de pasajeros" {
 		assert.that(naveSinPasajeros.alarma())
 	}
 
+	test "propulsar" {
+		naveConPasajeros.velocidad(290000)
+		naveConPasajeros.propulsar()
+		assert.equals(300000, naveConPasajeros.velocidad())
+	}
+
+	test "preparar para viajar" {
+		naveConPasajeros.velocidad(290000)
+	  	naveConPasajeros.prepararParaViajar()
+		assert.equals(300000, naveConPasajeros.velocidad())
+	}
+
+	test "encontrarse a un enemigo" {
+	  naveConPasajeros.velocidad(0)
+	  naveConPasajeros.meEncontreConUnEnemigo()
+	  assert.equals(20000, naveConPasajeros.velocidad())
+	  assert.that(naveConPasajeros.alarma())
+	}
 }
 
 describe "Nave de combate" {
@@ -82,5 +122,19 @@ describe "Nave de combate" {
 	test "recibir amenaza en ataque" {
 		naveEnAtaque.recibirAmenaza()
 		assert.equals("Enemigo encontrado", naveEnAtaque.ultimoMensaje())
+	}
+
+	test "preparar para viajar ataque" {
+	  naveEnAtaque.velocidad(0)
+	  naveEnAtaque.prepararParaViajar()
+	  assert.equals("Volviendo a la base", naveEnAtaque.ultimoMensaje())
+	  assert.equals(15000, naveEnAtaque.velocidad())
+	}
+
+	test "preparar para viajar reposo" {
+	  naveEnReposo.velocidad(0)
+	  naveEnReposo.prepararParaViajar()
+	  assert.equals("Saliendo en mision", naveEnReposo.ultimoMensaje())
+	  assert.equals(15000, naveEnReposo.velocidad())
 	}
 }
