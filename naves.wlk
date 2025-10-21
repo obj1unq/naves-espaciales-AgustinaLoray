@@ -13,8 +13,13 @@ class Nave {
 		if (velocidad +15000 < 300000)
 			{velocidad += 15000}
 		else {velocidad = 300000}
-	  
 	}
+
+	method meEncontreConUnEnemigo() {
+	  self.recibirAmenaza()
+	  self.propulsar()
+	}
+
 
 }
 
